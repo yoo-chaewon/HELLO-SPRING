@@ -46,105 +46,119 @@ import org.springframework.samples.petclinic.model.Person;
 @Table(name = "owners")
 public class Owner extends Person {
 
-	@Column(name = "address")
-	@NotEmpty
-	private String address;
+    public int getAge() {
+        return age;
+    }
 
-	@Column(name = "city")
-	@NotEmpty
-	private String city;
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	@Column(name = "telephone")
-	@NotEmpty
-	@Digits(fraction = 0, integer = 10)
-	private String telephone;
+    @Column(name = "age")
+    private int age;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-	private Set<Pet> pets;
+    @Column(name = "address")
+    @NotEmpty
+    private String address;
 
-	public String getAddress() {
-		return this.address;
-	}
+    @Column(name = "city")
+    @NotEmpty
+    private String city;
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    @Column(name = "telephone")
+    @NotEmpty
+    @Digits(fraction = 0, integer = 10)
+    private String telephone;
 
-	public String getCity() {
-		return this.city;
-	}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private Set<Pet> pets;
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public String getAddress() {
+        return this.address;
+    }
 
-	public String getTelephone() {
-		return this.telephone;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
+    public String getCity() {
+        return this.city;
+    }
 
-	protected Set<Pet> getPetsInternal() {
-		if (this.pets == null) {
-			this.pets = new HashSet<>();
-		}
-		return this.pets;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	protected void setPetsInternal(Set<Pet> pets) {
-		this.pets = pets;
-	}
+    public String getTelephone() {
+        return this.telephone;
+    }
 
-	public List<Pet> getPets() {
-		List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
-		PropertyComparator.sort(sortedPets, new MutableSortDefinition("name", true, true));
-		return Collections.unmodifiableList(sortedPets);
-	}
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 
-	public void addPet(Pet pet) {
-		if (pet.isNew()) {
-			getPetsInternal().add(pet);
-		}
-		pet.setOwner(this);
-	}
+    protected Set<Pet> getPetsInternal() {
+        if (this.pets == null) {
+            this.pets = new HashSet<>();
+        }
+        return this.pets;
+    }
 
-	/**
-	 * Return the Pet with the given name, or null if none found for this Owner.
-	 * @param name to test
-	 * @return true if pet name is already in use
-	 */
-	public Pet getPet(String name) {
-		return getPet(name, false);
-	}
+    protected void setPetsInternal(Set<Pet> pets) {
+        this.pets = pets;
+    }
 
-	/**
-	 * Return the Pet with the given name, or null if none found for this Owner.
-	 * @param name to test
-	 * @return true if pet name is already in use
-	 */
-	public Pet getPet(String name, boolean ignoreNew) {
-		name = name.toLowerCase();
-		for (Pet pet : getPetsInternal()) {
-			if (!ignoreNew || !pet.isNew()) {
-				String compName = pet.getName();
-				compName = compName.toLowerCase();
-				if (compName.equals(name)) {
-					return pet;
-				}
-			}
-		}
-		return null;
-	}
+    public List<Pet> getPets() {
+        List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
+        PropertyComparator.sort(sortedPets, new MutableSortDefinition("name", true, true));
+        return Collections.unmodifiableList(sortedPets);
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringCreator(this)
+    public void addPet(Pet pet) {
+        if (pet.isNew()) {
+            getPetsInternal().add(pet);
+        }
+        pet.setOwner(this);
+    }
 
-				.append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
-				.append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
-				.append("telephone", this.telephone).toString();
-	}
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     *
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name) {
+        return getPet(name, false);
+    }
+
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     *
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name, boolean ignoreNew) {
+        name = name.toLowerCase();
+        for (Pet pet : getPetsInternal()) {
+            if (!ignoreNew || !pet.isNew()) {
+                String compName = pet.getName();
+                compName = compName.toLowerCase();
+                if (compName.equals(name)) {
+                    return pet;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringCreator(this)
+
+            .append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
+            .append("firstName", this.getFirstName()).append("age", this.age)
+            .append("address", this.address).append("city", this.city)
+            .append("telephone", this.telephone).toString();
+    }
 
 }
